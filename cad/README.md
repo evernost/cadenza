@@ -1,6 +1,6 @@
 # Cadenza project
 
-A bike tachometer with reactive display and enhanced speed prediction.
+A bike tachometer with reactive display.
 
 ---
 
@@ -13,9 +13,8 @@ A bike tachometer with reactive display and enhanced speed prediction.
 ---
 
 ## Features
-TODO
-
-
+This is an attempt to make a bike tachometer with a display providing a much better FPS compared to most tachometers you can find. 
+Most of them are incredibly sluggish for reasons that are beyond me.
 
 ---
 
@@ -94,8 +93,8 @@ Grid dimensions
 |Name | Size | Description|
 |--------|------|-------|
 | Grid 1 | 0.25 mm | PCB outline |
-| Grid 2 | 25 mil | parts placement |
-| Grid 3 | 25 mil | routing |
+| Grid 2 | 50 mil | parts placement |
+| Grid 3 | 10 mil | routing |
 
 ---
 
@@ -106,8 +105,8 @@ None.
 ---
 
 ## References
-| Part type          | Reference                                                                                          |
-|--------------------|----------------------------------------------------------------------------------------------------|
-| LED driver         | TLC591 (TI)                                                                                        |
-| 7 segments display | HDSP-A401 (orange variant)<br>HDSP-7501 (red variant, high efficiency)<br>HDSP-7801 (green variant)|
-| MCU                | TBD                                                                                                |
+| Part type          | Reference                                                                                          | Selection criteria          |
+|--------------------|----------------------------------------------------------------------------------------------------| ------------------ |
+| LED driver         | TLC591 (TI)                                                                                        | Available in KiCAD<br>At least 8 outputs<br>Daisy-chain support |
+| 7 segments display | HDSP-A401 (orange variant)<br>HDSP-7501 (red variant, high efficiency)<br>HDSP-7801 (green variant)| Available in KiCAD<br> Bright enough for outside readbility|
+| MCU                | STM32F098                                                                                          | USB OTG (for flash drive support)<br>Low pin count (for size)<br>3.3V supply|
