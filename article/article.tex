@@ -1,0 +1,88 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathtools} % Charge amsmath.
+\usepackage{amssymb}
+\usepackage{circuitikz}
+\usepackage{fontspec}
+\usepackage{array}
+\usepackage{float}
+
+\setmainfont{Times New Roman}
+
+%
+% NOTE: schematics generated using the online tool: 'https://www.circuit2tikz.tf.fau.de/designer'.
+% Special thank to them!
+%
+
+\title{How to evaluate the speed of a bike}
+\author{QuBi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+The usual tachometers you can find for your bike are sluggish. They take forever to display the instantaneous speed. Probably because of some averaging process.\\
+
+There must be a smarter way of approximating the speed. In 2026, we can certainly do a better refresh rate than less than 1 fps.\\
+
+
+
+\section*{First section}
+
+*** SECTION IS TODO ***
+
+
+From which we can derive 2 regimes:
+\begin{itemize}	
+	\item $R_C \gg \left|Z\right|$ (low $I_C$): $\Delta I \rightarrow 0$
+	\item $R_C \ll \left|Z\right|$ (high $I_C$): $\Delta I \rightarrow \Delta I$ (no change)
+\end{itemize}
+
+
+Let's get more precise. The dynamic resistance (so the gain in the I/V curve) $R_C$ can be expressed explicitly as a function of $I_C$ therefore giving a more refined description of the transfer curve.
+
+For a BJT:
+\begin{equation}
+\begin{split}
+	a	& = \left. \frac{\partial I_C}{\partial V_{BE}} \right|_{V_{BE} = V_{BE}^0}\\
+ 		& = \left. \frac{\partial }{\partial V_{BE}} \right|_{V_{BE} = V_{BE}^0} I_S \exp \left( \right)\\
+		& = \left( 1 - \dfrac{2R_C}{2R_C + Z} \right) \Delta I\\
+		& = \dfrac{Z}{2R_C + Z} \Delta I
+\end{split}
+	a = 
+\end{equation}
+
+ 
+\subsection*{Limits}
+
+
+\subsubsection*{Large signal analysis}
+Unlike the Emitter Follower, there's no feedback here to rely on. Hence, we expect deviation from the model if the input is too wide.
+
+\subsubsection*{Transistor spec mismatch}
+This section is TODO.
+
+
+
+\section*{Example 12: the diode Ladder Filter}
+
+\subsubsection*{Description}
+As a follow-up of the Moog Ladder Filter, we now consider the case of the diode version. It looks very similar to the Moog one, except the BJTs have been replaced with diodes. 
+
+
+
+\section*{Example 13: the Moog Voltage Controlled High-Pass filter (module \textit{904B})}
+
+\subsubsection*{Description}
+Similarly, Moog came up with a design for a high-pass filter (also patented). The structure differs a bit from the low-pass, but it is equally as puzzling.
+
+Here below is one stage of the high-pass filter:
+
+
+
+
+
+
+\end{document}
