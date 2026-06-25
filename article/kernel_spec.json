@@ -1,0 +1,253 @@
+{
+    "version": "0.1",
+    "tikzSettings": {},
+    "components": [
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 188.976,
+                    "y": -179.528
+                },
+                {
+                    "x": 188.976,
+                    "y": -198.425
+                }
+            ],
+            "stroke": {
+                "width": "0.4pt"
+            },
+            "directions": [
+                null
+            ]
+        },
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 292.913,
+                    "y": -75.591
+                },
+                {
+                    "x": 311.811,
+                    "y": -75.591
+                }
+            ],
+            "stroke": {
+                "width": "0.4pt"
+            },
+            "directions": [
+                null
+            ]
+        },
+        {
+            "type": "node",
+            "position": {
+                "x": 188.976,
+                "y": -75.591
+            },
+            "id": "circ"
+        },
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 151.181,
+                    "y": -188.976
+                },
+                {
+                    "x": 415.748,
+                    "y": -188.976
+                }
+            ],
+            "stroke": {
+                "width": "0.4pt"
+            },
+            "directions": [
+                null
+            ]
+        },
+        {
+            "type": "node",
+            "label": {
+                "value": "u",
+                "anchor": "default",
+                "position": "east"
+            },
+            "position": {
+                "x": 415.748,
+                "y": -188.976
+            },
+            "scale": {
+                "x": 1.2,
+                "y": 1.2
+            },
+            "id": "currarrow"
+        },
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 302.362,
+                    "y": -37.795
+                },
+                {
+                    "x": 302.362,
+                    "y": -302.362
+                }
+            ],
+            "stroke": {
+                "width": "0.4pt"
+            },
+            "directions": [
+                null
+            ]
+        },
+        {
+            "type": "node",
+            "label": {
+                "value": "p",
+                "anchor": "default",
+                "position": "north"
+            },
+            "position": {
+                "x": 302.362,
+                "y": -302.362
+            },
+            "rotation": 90,
+            "scale": {
+                "x": 1.2,
+                "y": 1.2
+            },
+            "id": "currarrow"
+        },
+        {
+            "type": "node",
+            "position": {
+                "x": 302.362,
+                "y": -188.976
+            },
+            "id": "circ"
+        },
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 188.976,
+                    "y": -160.63
+                },
+                {
+                    "x": 188.976,
+                    "y": -188.976
+                }
+            ],
+            "stroke": {
+                "width": "2pt"
+            },
+            "directions": [
+                null
+            ],
+            "endArrow": "latex"
+        },
+        {
+            "type": "wire",
+            "points": [
+                {
+                    "x": 302.362,
+                    "y": -160.63
+                },
+                {
+                    "x": 302.362,
+                    "y": -188.976
+                }
+            ],
+            "stroke": {
+                "width": "2pt"
+            },
+            "directions": [
+                null
+            ],
+            "endArrow": "latex"
+        },
+        {
+            "type": "rect",
+            "position": {
+                "x": 302.362,
+                "y": -340.157
+            },
+            "stroke": {
+                "opacity": 0
+            },
+            "size": {
+                "x": 188.976,
+                "y": 37.795
+            },
+            "text": {
+                "text": "normalised distance",
+                "align": 1,
+                "justify": 0,
+                "fontSize": "footnotesize",
+                "showPlaceholderText": true
+            }
+        },
+        {
+            "type": "rect",
+            "label": {
+                "value": "1",
+                "anchor": "default",
+                "position": "default"
+            },
+            "position": {
+                "x": 198.425,
+                "y": -165.354
+            },
+            "stroke": {
+                "opacity": 0
+            },
+            "size": {
+                "x": 18.898,
+                "y": 28.346
+            }
+        },
+        {
+            "type": "rect",
+            "label": {
+                "value": "2",
+                "anchor": "default",
+                "position": "default"
+            },
+            "position": {
+                "x": 311.811,
+                "y": -165.355
+            },
+            "stroke": {
+                "opacity": 0
+            },
+            "size": {
+                "x": 18.898,
+                "y": 28.346
+            }
+        },
+        {
+            "type": "rect",
+            "position": {
+                "x": 510.236,
+                "y": -188.976
+            },
+            "stroke": {
+                "opacity": 0
+            },
+            "size": {
+                "x": 132.283,
+                "y": 37.795
+            },
+            "text": {
+                "text": "normalised speed",
+                "align": 1,
+                "justify": 0,
+                "fontSize": "footnotesize",
+                "showPlaceholderText": true
+            }
+        }
+    ]
+}

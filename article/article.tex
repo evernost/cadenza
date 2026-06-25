@@ -29,16 +29,34 @@ There must be a smarter way of approximating the speed. In 2026, we can certainl
 
 
 
-\section*{First section}
+\section*{Description of the problem}
 
-*** SECTION IS TODO ***
+In this article we describe an attempt at finding a "good" way of estimating the speed based on the common bike speed-o-meter setup: a magnetic sensor ticking on every spin of the wheel.
 
+\begin{circuitikz}
+	\draw (5, 4.75) -- (5, 5.25);
+	\draw (7.75, 2) -- (8.25, 2);
+	\node[circ] at (5, 2){};
+	\draw (4, 5) -- (11, 5);
+	\node[currarrow, xscale=1.2, yscale=1.2](N1) at (11, 5){} node[anchor=west] at (N1.east){$u$};
+	\draw (8, 1) -- (8, 8);
+	\node[currarrow, rotate=90, xscale=1.2, yscale=1.2](N2) at (8, 8){} node[anchor=south] at (N2.east){$p$};
+	\node[circ] at (8, 5){};
+	\draw[line width=2pt, -latex] (5, 4.25) -- (5, 5);
+	\draw[line width=2pt, -latex] (8, 4.25) -- (8, 5);
+	\node[shape=rectangle, minimum width=4.965cm, minimum height=0.965cm] at (8, 9){} node[anchor=center, align=center, text width=4.577cm, inner sep=6pt] at (8, 9){\footnotesize normalised distance};
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.715cm](N3) at (5.25, 4.375){} node[anchor=center] at (N3.text){$1$};
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.715cm](N4) at (8.25, 4.375){} node[anchor=center] at (N4.text){$2$};
+	\node[shape=rectangle, minimum width=3.465cm, minimum height=0.965cm] at (13.5, 5){} node[anchor=center, align=center, text width=3.077cm, inner sep=6pt] at (13.5, 5){\footnotesize normalised speed};
+\end{circuitikz}
 
-From which we can derive 2 regimes:
+Therefore the kernel function must satisfy:
 \begin{itemize}	
-	\item $R_C \gg \left|Z\right|$ (low $I_C$): $\Delta I \rightarrow 0$
-	\item $R_C \ll \left|Z\right|$ (high $I_C$): $\Delta I \rightarrow \Delta I$ (no change)
+	\item $p(-1) = -1$
+	\item $p(0) = 0$
 \end{itemize}
+
+But that doesn't yield any prediction capacity and is too permissive.
 
 
 Let's get more precise. The dynamic resistance (so the gain in the I/V curve) $R_C$ can be expressed explicitly as a function of $I_C$ therefore giving a more refined description of the transfer curve.
