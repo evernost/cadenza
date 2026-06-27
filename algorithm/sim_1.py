@@ -59,47 +59,89 @@ def kernel(dt, speed) :
 
 
 
-def trajectory(fS, tSim, profile = "start_and_settle", **kiwiArgs) :
+def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
   """
   Simulates the distance, speed and acceleration of a certain 
   trajectory using a profile descriptor:
   
   TYPE: "start_and_settle"
-    Initial position      : 0
-    Initial speed         : 0
-    Initial acceleration  : 0
+    Initial position      : 'd0' argument if specified (in meters), random otherwise
+    Initial speed         : 0 km/h
+    Final speed           : 'vInf' argument if specified (in km/h), random otherwise (10 km/h < v0 < 40 km/h)
+    Initial acceleration  : 'a0' argument if specified (in km/h/s), 0 km/h/s otherwise
   
     Description:
     Speed increases and settles exponentially to a maximum speed.
 
   TYPE: "brake"
-    Initial position      : 'd0' argument if specified, random otherwise
-    Initial speed         : 'v0' argument if specified, random otherwise (10 km/h < v0 < 40 km/h)
-    Initial acceleration  : 'a0' argument if specified, -50 km/h/s otherwise
+    Initial position      : 'd0' argument if specified (in meters), random otherwise
+    Initial speed         : 'v0' argument if specified (in km/h), random otherwise (10 km/h < v0 < 40 km/h)
+    Initial acceleration  : 'a0' argument if specified (in km/h/s), -10 km/h/s otherwise
 
     Description:
     Speed drops exponentially from some initial speed to 0.
 
+  TYPE: "acceleration"
+    Initial position      : 'd0' argument if specified (in meters), random otherwise
+    Initial speed         : 'v0' argument if specified (in km/h), random otherwise (10 km/h < v0 < 40 km/h)
+    Final speed           : 'vInf' argument if specified (in km/h), random otherwise (10 km/h < v0 < 40 km/h)
+    Initial acceleration  : 'a0' argument if specified (in km/h/s), +10 km/h/s otherwise
+
+    Description:
+    Speed drops exponentially from some initial speed to 0.
+
+
+  All profiles accept arguments 'r1' and 'r2' that describe the 'nervosity' of the system.
+  The higher the value, the higher the power and therefore acceleration capacity.
+
+  The model uses a double exponential for the speed.
+  The distance and acceleration are directly derived from it.
   """
 
-  nPts = round(tSim * fS)
-  t = np.arange(nPts) / fS
+  nPts = round(t_sim * f_s)
+  t = np.arange(nPts) / f_s
+
+  r1 = kiwiArgs.get("r1", 2.0)
+  r2 = kiwiArgs.get("r2", 3.0)
 
   # ---------------------------------------------------------------------------
   # PROFILE: START_AND_SETTLE
   # ---------------------------------------------------------------------------
   if (profile.lower() == "start_and_settle") :
 
-    if ("v0" not in kiwiArgs) :
-      v0 = random.uniform(10, 40)/3.6
+    d0    = kiwiArgs.get("d0",    0.0)
+    v0    = kiwiArgs.get("v0",    0.0)/3.6
+    vLim  = kiwiArgs.get("vLim",  random.uniform(10, 40))/3.6
+    a0    = kiwiArgs.get("a0",    0.0)/3.6
 
-    if ("a0" not in kiwiArgs) :
-      a0 = -50.0/3.6
+    A =  (r2*(vLim - v0) - a0)/(r1 - r2)
+    B = -(r1*(vLim - v0) + a0)/(r1 - r2)
+    C = vLim
+
+    d = d0 + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
+    v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
+    a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
 
 
-  d = 0
-  v = 0
-  a = 0
+
+  # ---------------------------------------------------------------------------
+  # PROFILE: BRAKE
+  # ---------------------------------------------------------------------------
+  elif (profile.lower() == "brake") :
+
+    d0    = kiwiArgs.get("d0",    random.uniform(0, 1000))
+    v0    = kiwiArgs.get("v0",    random.uniform(10, 40))/3.6
+    vLim  = kiwiArgs.get("vLim",  0.0)/3.6
+    a0    = kiwiArgs.get("a0",    -10.0)/3.6
+
+    A =  (r2*(vLim - v0) - a0)/(r1 - r2)
+    B = -(r1*(vLim - v0) + a0)/(r1 - r2)
+    C = vLim
+
+    d = d0 + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
+    v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
+    a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
+
 
   return (t, d, v, a)
 
@@ -109,13 +151,13 @@ def trajectory(fS, tSim, profile = "start_and_settle", **kiwiArgs) :
 # SIMULATOR
 # =============================================================================
 
-def run() :
+def run(f_s, t_sim) :
 
   # Simulate the distance, speed and acceleration from a speed profile
-  (t, d, v, a) = trajectory(fS, tSim, type = "high_settle")
+  (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
 
   # Simulate the odometer output
-  ticks = odometer(t, d)
+  ticks = odometer(t, d, diameter = 28)
 
   # Estimate the distance, speed and acceleration using the kernel
   (dEst, vEst, aEst) = estimator(t, ticks, d)
@@ -140,3 +182,23 @@ def run() :
   plt.grid(True)
   plt.show()
 
+
+
+# =============================================================================
+# UNIT TESTS
+# =============================================================================
+if (__name__ == "__main__") :
+
+  f_s = 100e3
+  t_sim = 20
+
+  (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
+
+  plt.plot(t, d, label = 'distance')
+  plt.plot(t, v, label = 'speed')
+  plt.xlabel("time (s)")
+  plt.ylabel("distance (km)")
+  plt.legend()
+  plt.title("reference speed profile")
+  plt.grid(True)
+  plt.show()
