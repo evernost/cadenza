@@ -1,6 +1,6 @@
 # Cadenza project
 
-A bike tachometer with reactive display.
+A tachometer with reactive display (car version)
 
 ---
 
