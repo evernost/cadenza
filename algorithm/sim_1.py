@@ -118,7 +118,7 @@ def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
     B = -(r1*(vLim - v0) + a0)/(r1 - r2)
     C = vLim
 
-    d = d0 + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
+    d = d0 + (A/r1) + (B/r2) + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
     v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
     a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
 
@@ -144,6 +144,39 @@ def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
 
 
   return (t, d, v, a)
+
+
+
+def odometer(t, d, diameter) :
+  """
+  Returns the list of time instants the odometer sensor will 'tick'.
+  
+  Arguments:
+  - t         : time vector
+  - d         : distance travelled at the time indicated by the time vector
+                i.e. d[i] = travelled distance at time t = t[i]
+                Distance is expressed in meters.
+  - diameter  : diameter of the wheel (in inches)
+  """
+
+  N = len(t)
+  ticks = [t[0]]
+  p = np.pi * diameter * 2.54 / 100
+
+  if (N == 1) :
+    return ticks
+
+  nLast = 0
+  dLast = d[0]
+  for n in range(N) :
+    if (d[n] >= (dLast + p)) :
+      nLast = n
+      dLast = d[n]
+      ticks.append(t[n])
+
+
+
+  return ticks
 
 
 
@@ -189,10 +222,12 @@ def run(f_s, t_sim) :
 # =============================================================================
 if (__name__ == "__main__") :
 
-  f_s = 100e3
+  f_s = 10e3
   t_sim = 20
 
   (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
+
+  ticks = odometer(t, d, diameter = 28)
 
   plt.plot(t, d, label = 'distance')
   plt.plot(t, v, label = 'speed')
