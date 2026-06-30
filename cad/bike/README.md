@@ -90,11 +90,11 @@ Designed with KiCAD 9.0.7
 
 Grid dimensions
 
-|Name | Size | Description|
-|--------|------|-------|
-| Grid 1 | 0.25 mm | PCB outline |
-| Grid 2 | 50 mil | parts placement |
-| Grid 3 | 10 mil | routing |
+| Name   | Size    | Description        |
+|--------|---------|--------------------|
+| Grid 1 | 0.25 mm | PCB outline        |
+| Grid 2 | 25 mil  | parts placement    |
+| Grid 3 | 10 mil  | routing            |
 
 ---
 

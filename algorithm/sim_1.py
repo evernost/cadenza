@@ -219,6 +219,31 @@ def estimator(t, ticks, diameter) :
   status = []
   for n in range(nPts) :
     
+
+    # No estimation is available before the second tick occured.
+    if (nTick == 1) :
+      if (t[n] < ticks[1]) :
+        d_est[n] = 0.0
+        status.append("not available before second tick")
+      else :
+        a_n = 0.0
+        b_n = 0.0
+        c_n = 1.0
+        
+        r_n = (ticks[nTick] - ticks[nTick-1]) / (ticks[nTick-1] - ticks[nTick-2])
+        a_new = 1 - (r_n*c_n) - ((r_n**2)*b_n)
+        b_new = 3 - (3*r_n*c_n) - (2*(r_n**2)*b_n)
+        c_new = 3 - (2*r_n*c_n) - ((r_n**2)*b_n)
+
+        a_n = a_new
+        b_n = b_new
+        c_n = c_new
+        
+        nTick += 1
+
+    else :
+
+
     # No estimation is available before the second tick occured.
     if (nTick == 1) :
       if (t[n] < ticks[1]) :
@@ -227,17 +252,29 @@ def estimator(t, ticks, diameter) :
       else :
         nTick += 1
         deltaT = ticks[1] - ticks[0]
-        d_est[n] = np.pi * (1 + (2*t[n]/deltaT) + (t[n]/deltaT)**2)
+        u = t[n]/deltaT
+        p_n = a_n * (u**3) + b_n * (u**2) + (c_n * u)
+        d_est[n] = (np.pi*diameter/100.0) * (nTick-1 + p_n)
         
     else :
-      if (t[n] < ticks[nTick]) :
-        deltaT = ticks[nTick-1] - ticks[nTick-2]
-        d_est[n] = np.pi * (1 + (2*t[n]/deltaT) + (t[n]/deltaT)**2)
-      else :
+
+      if (t[n] >= ticks[nTick]) :
+        r_n = (ticks[nTick] - ticks[nTick-1]) / (ticks[nTick-1] - ticks[nTick-2])
+        a_new = 1 - (r_n*c_n) - ((r_n**2)*b_n)
+        b_new = 3 - (3*r_n*c_n) - (2*(r_n**2)*b_n)
+        c_new = 3 - (2*r_n*c_n) - ((r_n**2)*b_n)
+
+        a_n = a_new
+        b_n = b_new
+        c_n = c_new
+
         nTick += 1
 
 
-    
+      deltaT = ticks[nTick-1] - ticks[nTick-2]
+      u = t[n]/deltaT
+      p_n = (a_n * (u**3)) + (b_n * (u**2)) + (c_n * u)
+      d_est[n] = (np.pi*diameter/100.0) * (nTick-1 + p_n)
 
   
 
