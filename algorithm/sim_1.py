@@ -116,7 +116,7 @@ def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
   nPts = round(t_sim * f_s)
   t = np.arange(nPts) / f_s
 
-  r1 = kiwiArgs.get("r1", 0.5)
+  r1 = kiwiArgs.get("r1", 0.1)
   r2 = kiwiArgs.get("r2", 0.6)
 
   # ---------------------------------------------------------------------------
@@ -156,6 +156,27 @@ def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
     d = d0 + (A/r1) + (B/r2) + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
     v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
     a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
+
+
+
+  # ---------------------------------------------------------------------------
+  # PROFILE: PACE_DECREASE
+  # ---------------------------------------------------------------------------
+  if (profile.lower() == "pace_decrease") :
+
+    d0    = kiwiArgs.get("d0",    0.0)
+    v0    = kiwiArgs.get("v0",    0.0)/3.6
+    vLim  = kiwiArgs.get("vLim",  random.uniform(10, 40))/3.6
+    a0    = kiwiArgs.get("a0",    0.0)/3.6
+
+    A =  (r2*(vLim - v0) - a0)/(r1 - r2)
+    B = -(r1*(vLim - v0) + a0)/(r1 - r2)
+    C = vLim
+
+    d = d0 + (A/r1) + (B/r2) + (C*t) - A*np.exp(-r1*t)/r1 - B*np.exp(-r2*t)/r2
+    v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
+    a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
+
 
 
   return (t, d, v, a)
@@ -217,75 +238,47 @@ def estimator(t, ticks, diameter) :
   a_est = np.zeros((nPts,))
   nTick = 1
   status = []
+  p = np.pi*(diameter*2.54)/100.0
+  K = .1                   # In (m/s^2)/m
   for n in range(nPts) :
     
-
     # No estimation is available before the second tick occured.
     if (nTick == 1) :
       if (t[n] < ticks[1]) :
         d_est[n] = 0.0
+        v_est[n] = 0.0
+        a_est[n] = 0.0
         status.append("not available before second tick")
       else :
-        a_n = 0.0
-        b_n = 0.0
-        c_n = 1.0
-        
-        r_n = (ticks[nTick] - ticks[nTick-1]) / (ticks[nTick-1] - ticks[nTick-2])
-        a_new = 1 - (r_n*c_n) - ((r_n**2)*b_n)
-        b_new = 3 - (3*r_n*c_n) - (2*(r_n**2)*b_n)
-        c_new = 3 - (2*r_n*c_n) - ((r_n**2)*b_n)
+        d_err = p
+        d_pursuit = 0.0
+        v_pursuit = p/(ticks[1]-ticks[0])
+        a_pursuit = K*d_err
 
-        a_n = a_new
-        b_n = b_new
-        c_n = c_new
-        
-        nTick += 1
-
-    else :
-
-
-    # No estimation is available before the second tick occured.
-    if (nTick == 1) :
-      if (t[n] < ticks[1]) :
         d_est[n] = 0.0
-        status.append("not available before second tick")
-      else :
+        v_est[n] = 0.0
+        a_est[n] = a_pursuit
+
         nTick += 1
-        deltaT = ticks[1] - ticks[0]
-        u = t[n]/deltaT
-        p_n = a_n * (u**3) + b_n * (u**2) + (c_n * u)
-        d_est[n] = (np.pi*diameter/100.0) * (nTick-1 + p_n)
         
     else :
 
-      if (t[n] >= ticks[nTick]) :
-        r_n = (ticks[nTick] - ticks[nTick-1]) / (ticks[nTick-1] - ticks[nTick-2])
-        a_new = 1 - (r_n*c_n) - ((r_n**2)*b_n)
-        b_new = 3 - (3*r_n*c_n) - (2*(r_n**2)*b_n)
-        c_new = 3 - (2*r_n*c_n) - ((r_n**2)*b_n)
-
-        a_n = a_new
-        b_n = b_new
-        c_n = c_new
-
-        nTick += 1
-
-
-      deltaT = ticks[nTick-1] - ticks[nTick-2]
-      u = t[n]/deltaT
-      p_n = (a_n * (u**3)) + (b_n * (u**2)) + (c_n * u)
-      d_est[n] = (np.pi*diameter/100.0) * (nTick-1 + p_n)
-
-  
-
+      # Update the model upon new tick
+      if (nTick < len(ticks)) :
+        if (t[n] > ticks[nTick]) :
+          d_err = (nTick*p) - d_est[n-1]
+          d_pursuit = d_est[n-1]
+          v_pursuit = p/(ticks[nTick]-ticks[nTick-1])
+          a_pursuit = K*d_err
+          nTick += 1
+      
+      u = t[n] - ticks[nTick-1]
+      d_est[n]  = 0.5 * a_pursuit * (u**2) 
+      d_est[n] += v_pursuit * u
+      d_est[n] += d_pursuit
 
 
   return (d_est, v_est, a_est, status)
-
-
-
-
-
 
 
 
@@ -308,12 +301,6 @@ def run(f_s, t_sim) :
 
   
 
-  # Distance
-  d = 1 - np.cos(2 * np.pi * 1.1 * t) + 10 * t
-
-  # Speed (derivative of d)
-  v = 2 * np.pi * 1.1 * np.sin(2 * np.pi * 1.1 * t) + 10
-
   # Plot
   plt.plot(t, d, label = "distance")
   plt.plot(t, v, label = "speed")
@@ -334,15 +321,17 @@ if (__name__ == "__main__") :
   f_s = 10e3
   t_sim = 20
 
-  (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
+  #(t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
+  (t, d, v, a) = trajectory(f_s, t_sim, type = "pace_decrease", v0 = 24.0, vLim = 5.0, a0 = 0)
 
   ticks = odometer(t, d, diameter = 28)
 
   # Estimate the distance, speed and acceleration using the kernel
-  (d_est, v_est, a_est) = estimator(t, ticks, diameter = 28)
+  (d_est, v_est, a_est, _) = estimator(t, ticks, diameter = 28)
 
 
   plt.plot(t, d, label = "distance")
+  plt.plot(t, d_est, label = "distance")
   plt.plot(t, v, label = "speed")
   plt.xlabel("time (s)")
   plt.ylabel("distance (km)")
