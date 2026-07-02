@@ -230,8 +230,6 @@ def estimator(t, ticks, diameter) :
   Description is TODO.
   """
 
-
-  
   nPts = len(t)
   d_est = np.zeros((nPts,))
   v_est = np.zeros((nPts,))
@@ -239,7 +237,7 @@ def estimator(t, ticks, diameter) :
   nTick = 1
   status = []
   p = np.pi*(diameter*2.54)/100.0
-  K = .1                   # In (m/s^2)/m
+  K = 0.09                   # In (m/s^2)/m
   for n in range(nPts) :
     
     # No estimation is available before the second tick occured.
@@ -254,10 +252,12 @@ def estimator(t, ticks, diameter) :
         d_pursuit = 0.0
         v_pursuit = p/(ticks[1]-ticks[0])
         a_pursuit = K*d_err
+        #a_pursuit = .09
 
         d_est[n] = 0.0
-        v_est[n] = 0.0
+        v_est[n] = p/(ticks[1]-ticks[0])
         a_est[n] = a_pursuit
+        a_est[n] = 100
 
         nTick += 1
         
@@ -268,14 +268,18 @@ def estimator(t, ticks, diameter) :
         if (t[n] > ticks[nTick]) :
           d_err = (nTick*p) - d_est[n-1]
           d_pursuit = d_est[n-1]
-          v_pursuit = p/(ticks[nTick]-ticks[nTick-1])
+          #v_pursuit = p/(ticks[nTick]-ticks[nTick-1])
+          v_pursuit = v_est[n-1]
           a_pursuit = K*d_err
           nTick += 1
       
       u = t[n] - ticks[nTick-1]
+
       d_est[n]  = 0.5 * a_pursuit * (u**2) 
       d_est[n] += v_pursuit * u
       d_est[n] += d_pursuit
+
+      v_est[n] = v_pursuit + (2*a_pursuit*u)
 
 
   return (d_est, v_est, a_est, status)
@@ -297,10 +301,6 @@ def run(f_s, t_sim) :
   # Estimate the distance, speed and acceleration using the kernel
   (d_est, v_est, a_est) = estimator(t, ticks)
 
-
-
-  
-
   # Plot
   plt.plot(t, d, label = "distance")
   plt.plot(t, v, label = "speed")
@@ -319,22 +319,22 @@ def run(f_s, t_sim) :
 if (__name__ == "__main__") :
 
   f_s = 10e3
-  t_sim = 20
+  t_sim = 50
 
-  #(t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle")
-  (t, d, v, a) = trajectory(f_s, t_sim, type = "pace_decrease", v0 = 24.0, vLim = 5.0, a0 = 0)
+  (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle", vLim = 25.0)
+  #(t, d, v, a) = trajectory(f_s, t_sim, type = "pace_decrease", v0 = 24.0, vLim = 5.0, a0 = 0)
 
   ticks = odometer(t, d, diameter = 28)
 
   # Estimate the distance, speed and acceleration using the kernel
   (d_est, v_est, a_est, _) = estimator(t, ticks, diameter = 28)
 
-
-  plt.plot(t, d, label = "distance")
-  plt.plot(t, d_est, label = "distance")
+  # plt.plot(t, d, label = "distance")
+  # plt.plot(t, d_est, label = "distance")
   plt.plot(t, v, label = "speed")
+  plt.plot(t, v_est, label = "speed")
   plt.xlabel("time (s)")
-  plt.ylabel("distance (km)")
+  plt.ylabel("distance (m)")
   plt.legend()
   plt.title("reference speed profile")
   plt.grid(True)
