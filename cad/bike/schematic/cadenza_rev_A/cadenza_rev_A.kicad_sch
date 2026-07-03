@@ -5227,6 +5227,50 @@
 			(embedded_fonts no)
 		)
 	)
+	(rectangle
+		(start 212.09 139.7)
+		(end 306.07 160.02)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "4a6051fc-cc18-4e77-a8e5-26491e3eb4cc")
+	)
+	(rectangle
+		(start 327.66 19.05)
+		(end 403.86 54.61)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "6f129e06-c5b2-4ec5-8635-c2aeb31e9d1e")
+	)
+	(text "Unreliable estimation"
+		(exclude_from_sim no)
+		(at 265.43 151.384 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+		)
+		(uuid "37930df5-e254-416a-b236-903de05e4977")
+	)
+	(text "Acceleration display"
+		(exclude_from_sim no)
+		(at 363.22 26.162 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+		)
+		(uuid "69a2bf10-667a-4908-9273-24bdfa3f4036")
+	)
 	(junction
 		(at 162.56 171.45)
 		(diameter 0)
@@ -6087,6 +6131,26 @@
 	)
 	(wire
 		(pts
+			(xy 163.83 105.41) (xy 163.83 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2aa741e9-34c7-4aac-88fd-22ab2fecb6ef")
+	)
+	(wire
+		(pts
+			(xy 153.67 105.41) (xy 163.83 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2abec5fb-30da-4318-8c8a-563b51ff1868")
+	)
+	(wire
+		(pts
 			(xy 46.99 95.25) (xy 41.91 95.25)
 		)
 		(stroke
@@ -6094,6 +6158,16 @@
 			(type default)
 		)
 		(uuid "2cf6c1d7-4a37-40ab-87fa-07e14b58f4d1")
+	)
+	(wire
+		(pts
+			(xy 226.06 154.94) (xy 226.06 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d05016e-52f2-4ab6-a369-34fd004ad602")
 	)
 	(wire
 		(pts
@@ -6284,6 +6358,16 @@
 			(type default)
 		)
 		(uuid "3c799a89-b510-4603-820f-172a9eaabf76")
+	)
+	(wire
+		(pts
+			(xy 165.1 64.77) (xy 167.64 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3caa6eee-aed7-468a-8d77-e7070f93e1e0")
 	)
 	(wire
 		(pts
@@ -6887,6 +6971,16 @@
 	)
 	(wire
 		(pts
+			(xy 162.56 102.87) (xy 162.56 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73cb0350-e8af-44ee-8bf4-811d669b5875")
+	)
+	(wire
+		(pts
 			(xy 57.15 71.12) (xy 57.15 85.09)
 		)
 		(stroke
@@ -7227,6 +7321,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 107.95) (xy 165.1 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91ab4671-7eb1-4e03-bfb3-1fd0f51b0635")
+	)
+	(wire
+		(pts
 			(xy 110.49 113.03) (xy 124.46 113.03)
 		)
 		(stroke
@@ -7234,6 +7338,16 @@
 			(type default)
 		)
 		(uuid "93533cbd-9624-41eb-9c89-1ddac8af6144")
+	)
+	(wire
+		(pts
+			(xy 163.83 52.07) (xy 167.64 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93533e18-74e8-465e-801f-f890eb8113fa")
 	)
 	(wire
 		(pts
@@ -7404,6 +7518,16 @@
 			(type default)
 		)
 		(uuid "a8f33a02-96e5-422b-8182-feeee6701f19")
+	)
+	(wire
+		(pts
+			(xy 153.67 102.87) (xy 162.56 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa9e0f1b-1486-44d9-b4a5-5b173d65ede0")
 	)
 	(wire
 		(pts
@@ -7917,6 +8041,16 @@
 	)
 	(wire
 		(pts
+			(xy 165.1 107.95) (xy 165.1 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2af91f7-82da-4dad-a4c4-6abdbceb7231")
+	)
+	(wire
+		(pts
 			(xy 86.36 95.25) (xy 86.36 78.74)
 		)
 		(stroke
@@ -8254,6 +8388,16 @@
 			(type default)
 		)
 		(uuid "ed5eb0c3-acc1-4109-bb6d-7cd86d736b0a")
+	)
+	(wire
+		(pts
+			(xy 162.56 49.53) (xy 167.64 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0bb35ef-346a-4e00-952d-81cc10f70b18")
 	)
 	(wire
 		(pts
@@ -11074,6 +11218,99 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:LED")
+		(at 226.06 151.13 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "630471fb-40df-47d2-b3a0-9faf219e0175")
+		(property "Reference" "D9"
+			(at 229.87 151.4474 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "LED"
+			(at 229.87 153.9874 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "LED_THT:LED_D3.0mm"
+			(at 226.06 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Light emitting diode"
+			(at 226.06 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 226.06 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "ac4400f8-c591-4dca-8125-deb3b0d61f78")
+		)
+		(pin "1"
+			(uuid "50a9d5f6-23e0-45d3-b413-2ba8c39d8a84")
+		)
+		(instances
+			(project "cadenza_rev_A"
+				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
+					(reference "D9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
 		(at 41.91 114.3 0)
 		(unit 1)
@@ -12393,6 +12630,84 @@
 			(project "cadenza_rev_A"
 				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
 					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 226.06 165.1 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b3aad8dd-14ff-4339-9fe6-b51c2a2e1b7a")
+		(property "Reference" "#PWR026"
+			(at 226.06 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 226.06 170.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 226.06 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d5ed30b4-d652-4fb8-a5cd-79fb4279ce9f")
+		)
+		(instances
+			(project "cadenza_rev_A"
+				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)

@@ -237,7 +237,7 @@ def estimator(t, ticks, diameter) :
   nTick = 1
   status = []
   p = np.pi*(diameter*2.54)/100.0
-  K = 0.09                   # In (m/s^2)/m
+  K = .1                   # In (m/s^2)/m
   for n in range(nPts) :
     
     # No estimation is available before the second tick occured.
@@ -250,14 +250,12 @@ def estimator(t, ticks, diameter) :
       else :
         d_err = p
         d_pursuit = 0.0
-        v_pursuit = p/(ticks[1]-ticks[0])
+        v_pursuit = 0
         a_pursuit = K*d_err
-        #a_pursuit = .09
 
         d_est[n] = 0.0
-        v_est[n] = p/(ticks[1]-ticks[0])
+        v_est[n] = v_pursuit
         a_est[n] = a_pursuit
-        a_est[n] = 100
 
         nTick += 1
         
@@ -275,11 +273,13 @@ def estimator(t, ticks, diameter) :
       
       u = t[n] - ticks[nTick-1]
 
-      d_est[n]  = 0.5 * a_pursuit * (u**2) 
-      d_est[n] += v_pursuit * u
-      d_est[n] += d_pursuit
+      a_est[n] = K*d_err*np.exp(-2*u)
+      v_est[n] = v_pursuit - (1/2)*a_est[n]
+      d_est[n] = d_pursuit + v_pursuit*u + ((1/5)*a_est[n])**2
 
-      v_est[n] = v_pursuit + (2*a_pursuit*u)
+      
+      
+      
 
 
   return (d_est, v_est, a_est, status)
@@ -331,10 +331,16 @@ if (__name__ == "__main__") :
 
   # plt.plot(t, d, label = "distance")
   # plt.plot(t, d_est, label = "distance")
+
   plt.plot(t, v, label = "speed")
   plt.plot(t, v_est, label = "speed")
   plt.xlabel("time (s)")
-  plt.ylabel("distance (m)")
+  plt.ylabel("speed (m/s)")
+  
+  # plt.plot(t, a_est, label = "acceleration")
+  # plt.xlabel("time (s)")
+  # plt.ylabel("distance (m)")
+
   plt.legend()
   plt.title("reference speed profile")
   plt.grid(True)
