@@ -137,6 +137,8 @@ def trajectory(f_s, t_sim, profile = "start_and_settle", **kiwiArgs) :
     v = A*np.exp(-r1*t) + B*np.exp(-r2*t) + C
     a = -r1*A*np.exp(-r1*t) - r2*B*np.exp(-r2*t)
 
+    print(f"[MODEL] Simulating profile 'start_and_settle' with vLim = {vLim*3.6} km/h")
+
 
 
   # ---------------------------------------------------------------------------
@@ -237,7 +239,7 @@ def estimator(t, ticks, diameter) :
   nTick = 1
   status = []
   p = np.pi*(diameter*2.54)/100.0
-  K = .1                   # In (m/s^2)/m
+  K = 5
   for n in range(nPts) :
     
     # No estimation is available before the second tick occured.
@@ -270,17 +272,20 @@ def estimator(t, ticks, diameter) :
           v_pursuit = v_est[n-1]
           a_pursuit = K*d_err
           nTick += 1
+          print(f"[DEBUG] t = {t[n]} err = {d_err}")
       
       u = t[n] - ticks[nTick-1]
 
-      a_est[n] = K*d_err*np.exp(-2*u)
-      v_est[n] = v_pursuit - (1/2)*a_est[n]
-      d_est[n] = d_pursuit + v_pursuit*u + ((1/5)*a_est[n])**2
+      # Exponential compensation for the acceleration
+      # Assume the tracker lags behind the target
+      # Then we give a 'kick' in acceleration (exponential decay)
+      # The greater the lag, the bigger the kick.
+      tau = 0.1
+      a_est[n] = K*d_err*np.exp(-u/tau)
+      v_est[n] = v_pursuit + K*d_err*(1-np.exp(-u/tau))*tau
+      d_est[n] = d_pursuit - K*d_err*tau*tau + v_pursuit*u + K*d_err*u*tau + (K*d_err*tau*tau)*np.exp(-u/tau)
 
       
-      
-      
-
 
   return (d_est, v_est, a_est, status)
 
@@ -329,19 +334,28 @@ if (__name__ == "__main__") :
   # Estimate the distance, speed and acceleration using the kernel
   (d_est, v_est, a_est, _) = estimator(t, ticks, diameter = 28)
 
-  # plt.plot(t, d, label = "distance")
-  # plt.plot(t, d_est, label = "distance")
-
-  plt.plot(t, v, label = "speed")
-  plt.plot(t, v_est, label = "speed")
-  plt.xlabel("time (s)")
-  plt.ylabel("speed (m/s)")
-  
-  # plt.plot(t, a_est, label = "acceleration")
+  # plt.plot(t, d/1000.0, label = "ground truth")
+  # plt.plot(t, d_est/1000.0, label = "pursuit")
   # plt.xlabel("time (s)")
-  # plt.ylabel("distance (m)")
+  # plt.ylabel("distance (km)")
+  # plt.title("distance tracking")
+
+  # plt.plot(t, v*3.6, label = "ground truth")
+  # plt.plot(t, v_est*3.6, label = "pursuit")
+  # plt.xlabel("time (s)")
+  # plt.ylabel("speed (km/h)")
+  # plt.title("speed tracking")
+  
+  plt.plot(t, a*3.6, label = "ground truth")
+  plt.plot(t, a_est*3.6, label = "pursuit")
+  plt.xlabel("time (s)")
+  plt.ylabel("acceleration (km/h/s)")
+  plt.title("acceleration tracking")
+
+  # 
+  # TODO: add a 'tick' plot overlay
+  #
 
   plt.legend()
-  plt.title("reference speed profile")
   plt.grid(True)
   plt.show()
