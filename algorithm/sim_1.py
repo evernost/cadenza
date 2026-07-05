@@ -29,6 +29,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+from collections import deque
 
 
 
@@ -225,8 +226,6 @@ def odometer(t, d, diameter) :
 
 
 
-
-
 def estimator(t, ticks, diameter) :
   """
   Description is TODO.
@@ -237,9 +236,12 @@ def estimator(t, ticks, diameter) :
   v_est = np.zeros((nPts,))
   a_est = np.zeros((nPts,))
   nTick = 1
-  status = []
   p = np.pi*(diameter*2.54)/100.0
-  K = 5
+  d = deque(maxlen = 5)
+  v = deque(maxlen = 5)
+  a = deque(maxlen = 5)
+  j = deque(maxlen = 5)
+  s = deque(maxlen = 5)
   for n in range(nPts) :
     
     # No estimation is available before the second tick occured.
@@ -248,46 +250,86 @@ def estimator(t, ticks, diameter) :
         d_est[n] = 0.0
         v_est[n] = 0.0
         a_est[n] = 0.0
-        status.append("not available before second tick")
       else :
-        d_err = p
-        d_pursuit = 0.0
-        v_pursuit = 0
-        a_pursuit = K*d_err
+        d.appendleft(p)
+        v.appendleft(p/(ticks[nTick]-ticks[nTick-1]))
+        a.appendleft(0.0)
+        j.appendleft(0.0)
+        s.appendleft(0.0)
 
-        d_est[n] = 0.0
-        v_est[n] = v_pursuit
-        a_est[n] = a_pursuit
+        u = t[n] - ticks[1]
+        d_est[n] = d[0] + (v[0]*u) + (0.5*a[0]*u*u) + (1/6)*(j[0]*u*u*u) + (1/24)*(s[0]*u*u*u*u)
+        v_est[n] = v[0] + (a[0]*u) + (0.5*j[0]*u*u) + (1/6)*(s[0]*u*u*u)
+        a_est[n] = a[0] + (j[0]*u) + (0.5*s[0]*u*u)
 
         nTick += 1
         
     else :
 
-      # Update the model upon new tick
+      # While there are ticks available
       if (nTick < len(ticks)) :
-        if (t[n] > ticks[nTick]) :
+        
+        # Update the model upon new tick
+        if (t[n] >= ticks[nTick]) :
           d_err = (nTick*p) - d_est[n-1]
-          d_pursuit = d_est[n-1]
-          #v_pursuit = p/(ticks[nTick]-ticks[nTick-1])
-          v_pursuit = v_est[n-1]
-          a_pursuit = K*d_err
+          
+          d.appendleft(nTick*p)
+          v.appendleft(p/(ticks[nTick]-ticks[nTick-1]))
+          a.appendleft((v[0] - v[1])/(ticks[nTick] - ticks[nTick-2]))
+          
+          if (nTick >= 3) :
+            j.appendleft((a[0] - a[1])/(ticks[nTick] - ticks[nTick-3]))
+          else :
+            j.appendleft(0.0)
+          
+          if (nTick >= 4) :
+            s.appendleft((j[0] - j[1])/(ticks[nTick] - ticks[nTick-4]))
+          else :
+            s.appendleft(0.0)
+          
+
           nTick += 1
           print(f"[DEBUG] t = {t[n]} err = {d_err}")
       
       u = t[n] - ticks[nTick-1]
 
-      # Exponential compensation for the acceleration
-      # Assume the tracker lags behind the target
-      # Then we give a 'kick' in acceleration (exponential decay)
-      # The greater the lag, the bigger the kick.
-      tau = 0.1
-      a_est[n] = K*d_err*np.exp(-u/tau)
-      v_est[n] = v_pursuit + K*d_err*(1-np.exp(-u/tau))*tau
-      d_est[n] = d_pursuit - K*d_err*tau*tau + v_pursuit*u + K*d_err*u*tau + (K*d_err*tau*tau)*np.exp(-u/tau)
+      # Does a better job for some reason
+      a0 = 2*a[0]
+      
+      d_est[n] = d[0] + (v[0]*u) + (0.5*a0*u*u) + (1/6)*(j[0]*u*u*u) + (1/24)*(s[0]*u*u*u*u)
+      v_est[n] = v[0] + (a0*u) + (0.5*j[0]*u*u) + (1/6)*(s[0]*u*u*u)
+      a_est[n] = a0 + (j[0]*u) + (0.5*s[0]*u*u)
 
       
 
-  return (d_est, v_est, a_est, status)
+  return (d_est, v_est, a_est)
+
+
+
+
+def error(d, v, a, d_est, v_est, a_est) :
+  """
+  Description is TODO.
+  """
+
+  nPts = len(d)
+  d_err = -1.0
+  v_err = -1.0
+  a_err = -1.0
+  for n in range(10,nPts) :
+    if (np.abs(d[n]-d_est[n]) > d_err) :
+      d_err = np.abs(d[n]-d_est[n])
+
+    if (np.abs(v[n]-v_est[n]) > v_err) :
+      v_err = np.abs(v[n]-v_est[n])
+
+    if (np.abs(a[n]-a_est[n]) > a_err) :
+      a_err = np.abs(a[n]-a_est[n])
+
+  print(f"max error: distance = {d_err} m, speed = {v_err*3.6} km/h, acceleration = {a_err*3.6} km/h/s")
+
+  return (d_err, v_err, a_err)
+
 
 
 
@@ -327,12 +369,14 @@ if (__name__ == "__main__") :
   t_sim = 50
 
   (t, d, v, a) = trajectory(f_s, t_sim, type = "start_and_settle", vLim = 25.0)
-  #(t, d, v, a) = trajectory(f_s, t_sim, type = "pace_decrease", v0 = 24.0, vLim = 5.0, a0 = 0)
+  #(t, d, v, a) = trajectory(f_s, t_sim, type = "pace_decrease", v0 = 40.0, vLim = 5.0, a0 = 0)
 
   ticks = odometer(t, d, diameter = 28)
 
   # Estimate the distance, speed and acceleration using the kernel
-  (d_est, v_est, a_est, _) = estimator(t, ticks, diameter = 28)
+  (d_est, v_est, a_est) = estimator(t, ticks, diameter = 28)
+
+  (d_err, v_err, a_err) = error(d, v, a, d_est, v_est, a_est)
 
   # plt.plot(t, d/1000.0, label = "ground truth")
   # plt.plot(t, d_est/1000.0, label = "pursuit")
@@ -340,17 +384,17 @@ if (__name__ == "__main__") :
   # plt.ylabel("distance (km)")
   # plt.title("distance tracking")
 
-  # plt.plot(t, v*3.6, label = "ground truth")
-  # plt.plot(t, v_est*3.6, label = "pursuit")
-  # plt.xlabel("time (s)")
-  # plt.ylabel("speed (km/h)")
-  # plt.title("speed tracking")
-  
-  plt.plot(t, a*3.6, label = "ground truth")
-  plt.plot(t, a_est*3.6, label = "pursuit")
+  plt.plot(t, v*3.6, label = "ground truth")
+  plt.plot(t, v_est*3.6, label = "pursuit")
   plt.xlabel("time (s)")
-  plt.ylabel("acceleration (km/h/s)")
-  plt.title("acceleration tracking")
+  plt.ylabel("speed (km/h)")
+  plt.title("speed tracking")
+  
+  # plt.plot(t, a*3.6, label = "ground truth")
+  # plt.plot(t, a_est*3.6, label = "pursuit")
+  # plt.xlabel("time (s)")
+  # plt.ylabel("acceleration (km/h/s)")
+  # plt.title("acceleration tracking")
 
   # 
   # TODO: add a 'tick' plot overlay
