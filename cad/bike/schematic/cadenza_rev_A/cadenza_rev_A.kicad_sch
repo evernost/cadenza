@@ -5212,6 +5212,12 @@
 		(uuid "506dd2cf-357d-4de1-9c9a-1d2c17d78bf1")
 	)
 	(junction
+		(at 339.09 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5a2d59dc-6431-40d9-bbc5-b84f98754613")
+	)
+	(junction
 		(at 78.74 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6024,6 +6030,16 @@
 			(type default)
 		)
 		(uuid "1f2921bd-9127-4c36-b47c-c9a75c6fbcf1")
+	)
+	(wire
+		(pts
+			(xy 353.06 71.12) (xy 339.09 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f9c8fb9-4fc7-4fe6-9fbb-926dcd365277")
 	)
 	(wire
 		(pts
@@ -7637,6 +7653,16 @@
 	)
 	(wire
 		(pts
+			(xy 353.06 73.66) (xy 353.06 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81eb7ea8-17e3-4353-bd21-a93f03492d7c")
+	)
+	(wire
+		(pts
 			(xy 171.45 78.74) (xy 218.44 78.74)
 		)
 		(stroke
@@ -9237,6 +9263,16 @@
 	)
 	(wire
 		(pts
+			(xy 353.06 81.28) (xy 353.06 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5497ff1-f1a3-4d13-97b1-a04be9371942")
+	)
+	(wire
+		(pts
 			(xy 273.05 92.71) (xy 269.24 92.71)
 		)
 		(stroke
@@ -9994,6 +10030,84 @@
 			(project "cadenza_rev_A"
 				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
 					(reference "#PWR027")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 353.06 83.82 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "08709f8f-06e5-499d-b5e8-350128a8351d")
+		(property "Reference" "#PWR037"
+			(at 353.06 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 353.06 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 353.06 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 353.06 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 353.06 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "79f15bb3-aeb6-4f92-8f61-0882715cd988")
+		)
+		(instances
+			(project "cadenza_rev_A"
+				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -11991,6 +12105,88 @@
 			(project "cadenza_rev_A"
 				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
 					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 353.06 77.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "51e47552-95be-442d-8515-33a283aa77dd")
+		(property "Reference" "C12"
+			(at 356.87 76.1999 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 356.87 78.7399 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+			(at 354.0252 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 353.06 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 353.06 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "67a3d088-2276-4e23-b060-67e49caae8e6")
+		)
+		(pin "2"
+			(uuid "2dc67aae-f0ee-4a90-bfca-20421cc172a0")
+		)
+		(instances
+			(project "cadenza_rev_A"
+				(path "/dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
+					(reference "C12")
 					(unit 1)
 				)
 			)
