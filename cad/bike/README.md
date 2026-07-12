@@ -105,8 +105,10 @@ None.
 ---
 
 ## References
-| Part type          | Reference                                                                                          | Selection criteria          |
-|--------------------|----------------------------------------------------------------------------------------------------| ------------------ |
-| LED driver         | TLC591 (TI)                                                                                        | Available in KiCAD<br>At least 8 outputs<br>Daisy-chain support |
-| 7 segments display | HDSP-A401 (orange variant)<br>HDSP-7501 (red variant, high efficiency)<br>HDSP-7801 (green variant)| Available in KiCAD<br> Bright enough for outside readbility|
-| MCU                | STM32F098                                                                                          | USB OTG (for flash drive support)<br>Low pin count (for size)<br>3.3V supply|
+| Part type          | Reference                                                                                            | Selection criteria |
+|--------------------|------------------------------------------------------------------------------------------------------|--------------------|
+| LED driver         | TLC591 (TI)                                                                                          | Available in KiCAD<br>At least 8 outputs<br>Daisy-chain support |
+| 7 segments display | HDSP-A401 (orange variant)<br>HDSP-7501 (red variant, high efficiency)<br>HDSP-7801 (green variant)  | Available in KiCAD<br> Bright enough for outside readbility|
+| MCU                | STM32F098                                                                                            | USB OTG (for flash drive support)<br>Low pin count (for size)<br>3.3V supply|
+| ON/OFF switch      | GW12LJPD                                                                                             | Available in KiCAD |
+
