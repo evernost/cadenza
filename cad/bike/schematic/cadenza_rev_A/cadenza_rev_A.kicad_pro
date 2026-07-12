@@ -676,7 +676,7 @@
         "uuid": "dbb6f7df-ddcf-4018-ba7f-ab9ccecd39f9"
       }
     ],
-    "used_designators": "U14,SW1-4,H1-4,J4-8,R7-15,#PWR21-50,D9-10,C2-15",
+    "used_designators": "U14,SW1-4,H1-4,J4-8,R7-16,#PWR21-52,D9-10,C2-19",
     "variants": []
   },
   "sheets": [
